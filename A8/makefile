@@ -1,28 +1,20 @@
-# Compilador
 CC = gcc
+CFLAGS = -Wall -pthread -lrt
+TARGETS = write_semaphore read_semaphore
 
-# Opciones de compilación
-CFLAGS = -Wall -Wextra -std=c11
+all: $(TARGETS)
 
-# Ejecutables
-READER = reader
-WRITER = writer
+write_semaphore: write_semaphore.c common.h
+	$(CC) $(CFLAGS) write_semaphore.c -o write_semaphore
 
-# Archivos fuente
-READER_SRC = read.c
-WRITER_SRC = write.c
+read_semaphore: read_semaphore.c common.h
+	$(CC) $(CFLAGS) read_semaphore.c -o read_semaphore
 
-# Regla por defecto
-all: $(READER) $(WRITER)
+run: all
+	@echo "Abriendo read_semaphore en una terminal..."
+	gnome-terminal -- ./read_semaphore
+	@echo "Abriendo write_semaphore en otra terminal..."
+	gnome-terminal -- ./write_semaphore
 
-# Compilar reader
-$(READER): $(READER_SRC)
-	$(CC) $(CFLAGS) -o $(READER) $(READER_SRC)
-
-# Compilar writer
-$(WRITER): $(WRITER_SRC)
-	$(CC) $(CFLAGS) -o $(WRITER) $(WRITER_SRC)
-
-# Limpiar archivos generados
 clean:
-	rm -f $(READER) $(WRITER)
+	rm -f $(TARGETS)

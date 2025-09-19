@@ -11,18 +11,23 @@ int main (int argc, char *argv[]){
 
     char *buff;
     int ret;
+    int shm_id = shmget(SHM_KEY, 5095, IPC_CREAT | 0666);
 
-    int shm_id = shmget(SHM_KEY, 0,0 );
-    if(shm_id ==-1)
-        exit(-1);
-
+    if ( shm_id ==1)
+        exit (-1);
+    
     buff = shmat(shm_id, 0,0);
 
-    printf("%s\n", buff);
-
+    for(;;){
+        char * str=fgets(buff, MAX_LEN, stdin);
+        if (str ==NULL)
+        break;
+        
+    }
     ret = shmdt(buff);
     if(ret ==0)
-        printf("memory dettached\n");
-
+        printf("memory dettached \n");
+    
     return 0;
+
 }
